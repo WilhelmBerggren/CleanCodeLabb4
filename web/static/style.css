@@ -1,0 +1,22 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 85%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+* {
+  padding: 0.2em;
+}
+
+.body {
+  background-color: #f6f6ef;
+}
+
+.title {
+  margin-top: 0;
+  background-color: #ff6600;
+  font-size: 2em;
+  font-weight: bold;
+}
