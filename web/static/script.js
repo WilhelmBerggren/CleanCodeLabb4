@@ -5,10 +5,10 @@ const api = "http://localhost:5000/api";
 function SubmitForm({ submitPost }) {
   return html`
     <p>New post: 
-      <form onsubmit=${submitPost}>
-        <input name="title" placeholder="title" />
-        <input name="url" placeholder="url" />
-        <input type="submit" value="yeet it to the cloud"/>
+      <form id="submit-post-form" onsubmit=${submitPost}>
+        <input id="title-field" name="title" placeholder="title" />
+        <input id="url-field" name="url" placeholder="url" />
+        <input id="submit-post-button" type="submit" value="yeet it to the cloud"/>
       </form>
     </p>`;
 }
@@ -17,14 +17,14 @@ function Post({post, deletePost}) {
   const { id, title, url } = post;
 
   return html`
-    <div class="post">
-      <p><strong>${id}: ${title}</strong></p>
-      <a href=${url}>
+    <div id=${id} class="post">
+      <p class="post-title"><strong>${id}: ${title}</strong></p>
+      <a class="post-url" href=${url}>
         ${url.endsWith('jpg') 
-          ? html`<img loading="lazy" width="300" src=${url} alt="post image" />` 
+          ? html`<img class="post-image" loading="lazy" width="300" src=${url} alt="post image" />` 
           : url}
       </a>
-      <p><button onclick="${() => deletePost(id)}">Delete post</button></p>
+      <p><button class="delete-post-button" onclick="${() => deletePost(id)}">Delete post</button></p>
     </div>
   `;
 }
@@ -39,7 +39,7 @@ function usePosts() {
       .then(d => setPosts(d || []));
   }
 
-  function submitPost() {
+  function submitPost(e) {
     e.preventDefault();
     const data = new FormData(e.target);
     const url = data.get('url');
