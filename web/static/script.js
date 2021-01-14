@@ -2,7 +2,7 @@ import { html, render, useState, useEffect } from './libs/htm.preact.standalone.
 
 const api = "http://localhost:5000/api";
 
-function Post({post}) {
+function Post({post, deletePost}) {
   return html`
     <div class="post">
       <p><strong>${post.id}: ${post.title}</strong></p>
@@ -11,19 +11,27 @@ function Post({post}) {
           ? html`<img loading="lazy" width="300" src=${post.url} alt="post image" />` 
           : post.url}
       </a>
+      <p><button onclick="${() => deletePost(post.id)}"></button></p>
     </div>
   `;
 }
 
-function App() {
-  const [data, setData] = useState([]);
-
+function usePosts() {
+  const [posts, setPosts] = useState([]);
   useEffect(fetchPosts, []);
 
   function fetchPosts() {
     fetch(`${api}/posts`)
       .then(res => res.json())
-      .then(d => setData(d || []));
+      .then(d => setPosts(d || []));
+  }
+
+  function deletePost(id) {
+    fetch(`${api}/posts/${id}`, {
+      method: "DELETE",
+      mode: "cors",
+    })
+    .then(fetchPosts);
   }
 
   function submitPost() {
@@ -40,6 +48,17 @@ function App() {
     .then(fetchPosts);
   }
 
+  return {
+    posts,
+    fetchPosts,
+    submitPost,
+    deletePost
+  }
+}
+
+function App() {
+  const { posts, submitPost, deletePost } = usePosts();
+
   return html`
     <div class="body">
       <p class="title">Nilhelm Hacker News [48 65 6a 20 44 61 76 69 64]</p>
@@ -51,8 +70,8 @@ function App() {
         </form>
       </p>
       <div>
-        ${data.map(post => html`
-          <${Post} key=${post.id} post=${post} />
+        ${posts.map(post => html`
+          <${Post} key=${post.id} post=${post} deletePost=${deletePost} />
         `)}
       </div>
     </div>`;
