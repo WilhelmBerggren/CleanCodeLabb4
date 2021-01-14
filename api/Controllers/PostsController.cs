@@ -52,6 +52,22 @@ namespace CleanCodeLabb4.Controllers
             return CreatedAtAction(nameof(GetPost), new { id = post.Id }, post);
         }
 
+        // DELETE: api/TodoItems/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTodoItem(long id)
+        {
+            var todoItem = await _context.Posts.FindAsync(id);
+            if (todoItem == null)
+            {
+                return NotFound();
+            }
+
+            _context.Posts.Remove(todoItem);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
         private bool PostExists(long id)
         {
             return _context.Posts.Any(e => e.Id == id);
