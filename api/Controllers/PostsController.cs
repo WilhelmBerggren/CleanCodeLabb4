@@ -56,13 +56,13 @@ namespace CleanCodeLabb4.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTodoItem(long id)
         {
-            var todoItem = await _context.Posts.FindAsync(id);
-            if (todoItem == null)
+            var postItem = await _context.Posts.FindAsync(id);
+            if (postItem == null)
             {
                 return NotFound();
             }
 
-            _context.Posts.Remove(todoItem);
+            _context.Posts.Remove(postItem);
             await _context.SaveChangesAsync();
 
             return NoContent();
